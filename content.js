@@ -1,5 +1,5 @@
 /**
- * Brightness Controller — Content Script
+ * DimWise — Content Script
  *
  * Runs in every http/https page. Detects page luminance from DOM background
  * colors and applies a CSS brightness filter to the <html> element.

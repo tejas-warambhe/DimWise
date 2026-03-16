@@ -297,6 +297,123 @@ header {
   font-weight: 600;
 }
 
+/* ── Managed sites section ───────────────────────────────────────────── */
+.sites-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.sites-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.sites-header:hover { color: var(--text); }
+
+.sites-count {
+  background: var(--border);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 8px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.sites-chevron {
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+
+.sites-chevron::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.sites-chevron.open::after {
+  transform: rotate(-135deg);
+}
+
+.sites-list {
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.sites-list.hidden { display: none; }
+
+.sites-empty {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--border);
+  text-align: center;
+}
+
+.site-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.site-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.site-item-name {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-item-meta {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.site-item-remove {
+  background: none;
+  border: none;
+  color: var(--border);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.site-item-remove:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
 /* ── Unavailable state ───────────────────────────────────────────────── */
 .unavailable {
   background: var(--surface);

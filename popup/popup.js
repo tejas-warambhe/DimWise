@@ -1,5 +1,5 @@
 /**
- * Brightness Controller — Popup Script
+ * DimWise — Popup Script
  *
  * Manages the popup UI:
  *  - Reads settings from chrome.storage.sync
@@ -202,9 +202,94 @@ function bindEvents() {
     }
 
     renderAll();
+    renderManagedSites();
     if (state.contentAvailable) {
       sendToContent(state.tabId, { type: 'REFRESH' }).catch(() => {});
     }
+  });
+}
+
+// ─── Managed Sites ────────────────────────────────────────────────────────────
+
+async function loadManagedSites() {
+  const data = await chrome.storage.sync.get(null); // get everything
+  const sites = [];
+  for (const [key, val] of Object.entries(data)) {
+    if (key.startsWith('site:')) {
+      sites.push({ hostname: key.slice(5), settings: val });
+    }
+  }
+  return sites.sort((a, b) => a.hostname.localeCompare(b.hostname));
+}
+
+async function renderManagedSites() {
+  const sites = await loadManagedSites();
+  const list = $('sites-list');
+  const empty = $('sites-empty');
+  const count = $('sites-count');
+
+  count.textContent = sites.length;
+
+  // Clear existing items (keep the empty placeholder)
+  list.querySelectorAll('.site-item').forEach((el) => el.remove());
+
+  if (sites.length === 0) {
+    empty.style.display = '';
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  for (const site of sites) {
+    const modeLabel = site.settings.mode === 'auto'
+      ? `Auto ${Number(site.settings.strength ?? 50)}%`
+      : `Manual ${Math.round(Number(site.settings.manual ?? 0.85) * 100)}%`;
+
+    const item = document.createElement('div');
+    item.className = 'site-item';
+    item.innerHTML = `
+      <div class="site-item-info">
+        <span class="site-item-name"></span>
+        <span class="site-item-meta"></span>
+      </div>
+      <button class="site-item-remove" title="Remove custom settings">&times;</button>
+    `;
+    item.querySelector('.site-item-name').textContent = site.hostname;
+    item.querySelector('.site-item-meta').textContent = modeLabel;
+
+    item.querySelector('.site-item-remove').addEventListener('click', async () => {
+      await chrome.storage.sync.remove(`site:${site.hostname}`);
+      // If we just removed the current site, update the per-site checkbox
+      if (site.hostname === state.hostname) {
+        state.hasSiteSettings = false;
+        const data = await chrome.storage.sync.get('global');
+        state.settings = { ...(data.global || defaultSettings()) };
+        renderAll();
+        if (state.contentAvailable) {
+          sendToContent(state.tabId, { type: 'REFRESH' }).catch(() => {});
+        }
+      }
+      renderManagedSites();
+    });
+
+    list.appendChild(item);
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function bindSitesToggle() {
+  $('sites-toggle').addEventListener('click', () => {
+    const list = $('sites-list');
+    const chevron = $('sites-chevron');
+    const isHidden = list.classList.contains('hidden');
+    list.classList.toggle('hidden', !isHidden);
+    chevron.classList.toggle('open', isHidden);
+    if (isHidden) renderManagedSites();
   });
 }
 
@@ -248,9 +333,11 @@ async function init() {
     await loadSettings();
     renderAll();
     bindEvents();
+    bindSitesToggle();
+    renderManagedSites(); // populate count badge
 
   } catch (err) {
-    showUnavailable('Something went wrong: ' + err.message);
+    showUnavailable('Something went wrong: ' + escapeHtml(err.message));
   }
 }
 

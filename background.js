@@ -1,5 +1,5 @@
 /**
- * Brightness Controller — Service Worker (Background)
+ * DimWise — Service Worker (Background)
  *
  * Responsibilities:
  *  1. Generates the toolbar icon dynamically via OffscreenCanvas

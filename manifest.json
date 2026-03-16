@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Brightness Controller",
+  "name": "DimWise",
   "version": "1.0.0",
   "description": "Content-aware per-tab brightness adjustment. Auto-dims bright pages, leaves dark pages alone.",
   "permissions": ["storage", "scripting"],
@@ -14,7 +14,7 @@
   ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "Brightness Controller"
+    "default_title": "DimWise"
   },
   "background": {
     "service_worker": "background.js"

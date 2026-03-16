@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Brightness Controller</title>
+  <title>DimWise</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
@@ -12,7 +12,7 @@
     <header>
       <div class="title">
         <span class="sun-icon" aria-hidden="true">☀</span>
-        <span>Brightness</span>
+        <span>DimWise</span>
       </div>
       <label class="toggle" title="Enable / disable">
         <input type="checkbox" id="enabled" />
@@ -83,6 +83,18 @@
             <strong id="hostname">this site</strong>
           </span>
         </label>
+      </div>
+
+      <!-- ── Managed sites list ── -->
+      <div class="sites-section">
+        <button class="sites-header" id="sites-toggle">
+          <span>Managed sites</span>
+          <span class="sites-count" id="sites-count">0</span>
+          <span class="sites-chevron" id="sites-chevron"></span>
+        </button>
+        <div class="sites-list hidden" id="sites-list">
+          <div class="sites-empty" id="sites-empty">No custom site settings yet.</div>
+        </div>
       </div>
 
     </div><!-- /.bc-body -->
