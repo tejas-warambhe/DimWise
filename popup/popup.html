@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brightness Controller</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+
+    <!-- ── Header ── -->
+    <header>
+      <div class="title">
+        <span class="sun-icon" aria-hidden="true">☀</span>
+        <span>Brightness</span>
+      </div>
+      <label class="toggle" title="Enable / disable">
+        <input type="checkbox" id="enabled" />
+        <span class="knob"></span>
+      </label>
+    </header>
+
+    <!-- ── Main body (disabled when extension is off) ── -->
+    <div class="bc-body" id="bc-body">
+
+      <!-- Mode tabs -->
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-mode="auto" role="tab">Auto</button>
+        <button class="tab" data-mode="manual" role="tab">Manual</button>
+      </div>
+
+      <!-- ── Auto panel ── -->
+      <div id="auto-panel" class="panel">
+        <div class="info-card">
+          <div class="info-row">
+            <span class="info-label">Page luminance</span>
+            <div class="lum-bar" aria-hidden="true">
+              <div class="lum-fill" id="lum-fill"></div>
+            </div>
+            <span class="info-val accent" id="lum-val">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Applied</span>
+            <div class="lum-bar" style="visibility:hidden" aria-hidden="true"></div>
+            <span class="info-val" id="applied-val">—</span>
+          </div>
+        </div>
+
+        <div class="control-card">
+          <div class="ctrl-header">
+            <span class="ctrl-label">Strength</span>
+            <span class="ctrl-val" id="strength-val">50%</span>
+          </div>
+          <input type="range" class="slider" id="strength" min="0" max="100" value="50"
+                 aria-label="Auto-adjust strength" />
+          <div class="slider-hints">
+            <span>Subtle</span><span>Aggressive</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Manual panel ── -->
+      <div id="manual-panel" class="panel hidden">
+        <div class="control-card">
+          <div class="ctrl-header">
+            <span class="ctrl-label">Brightness</span>
+            <span class="ctrl-val" id="brightness-val">85%</span>
+          </div>
+          <input type="range" class="slider" id="brightness" min="20" max="100" value="85"
+                 aria-label="Manual brightness" />
+          <div class="slider-hints">
+            <span>Dim</span><span>Full</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Per-site override ── -->
+      <div class="site-card">
+        <label class="site-toggle">
+          <input type="checkbox" id="per-site" />
+          <span>
+            Custom settings for
+            <strong id="hostname">this site</strong>
+          </span>
+        </label>
+      </div>
+
+    </div><!-- /.bc-body -->
+  </div><!-- /.container -->
+
+  <script src="popup.js"></script>
+</body>
+</html>

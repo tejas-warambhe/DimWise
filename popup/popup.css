@@ -1,0 +1,315 @@
+/* ── Reset & Variables ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:         #111827;
+  --surface:    #1f2937;
+  --border:     #374151;
+  --text:       #f3f4f6;
+  --muted:      #9ca3af;
+  --accent:     #f59e0b;
+  --accent-dim: rgba(245, 158, 11, 0.15);
+  --radius:     10px;
+  --radius-sm:  6px;
+  --transition: 0.15s ease;
+}
+
+body {
+  width: 288px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.container {
+  padding: 14px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.sun-icon {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.5));
+}
+
+/* ── Toggle switch ───────────────────────────────────────────────────── */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggle input { opacity: 0; width: 0; height: 0; }
+
+.knob {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 11px;
+  transition: background var(--transition);
+}
+
+.knob::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.toggle input:checked ~ .knob { background: var(--accent); }
+.toggle input:checked ~ .knob::after { transform: translateX(18px); }
+
+/* ── Body (disabled state) ───────────────────────────────────────────── */
+.bc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity var(--transition);
+}
+
+.bc-body.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ── Mode tabs ───────────────────────────────────────────────────────── */
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 3px;
+  gap: 3px;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #111;
+  font-weight: 700;
+}
+
+.tab:not(.active):hover {
+  color: var(--text);
+  background: var(--border);
+}
+
+/* ── Panels ──────────────────────────────────────────────────────────── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel.hidden { display: none; }
+
+/* ── Info card (luminance readout) ───────────────────────────────────── */
+.info-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-label {
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 88px;
+}
+
+.info-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 34px;
+  text-align: right;
+}
+
+.info-val.accent { color: var(--accent); }
+
+/* Luminance bar */
+.lum-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.lum-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  /* green (dark) → amber (mid) → red (very bright) */
+  background: linear-gradient(to right, #10b981, #f59e0b, #ef4444);
+  transition: width 0.4s ease;
+}
+
+/* ── Control card (slider) ───────────────────────────────────────────── */
+.control-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ctrl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ctrl-label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ctrl-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ── Range slider ────────────────────────────────────────────────────── */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px var(--accent-dim);
+  transform: scale(1.1);
+}
+
+.slider:active::-webkit-slider-thumb {
+  transform: scale(0.95);
+}
+
+.slider-hints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--border);
+  padding: 0 2px;
+}
+
+/* ── Per-site card ───────────────────────────────────────────────────── */
+.site-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+}
+
+.site-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  user-select: none;
+}
+
+.site-toggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.site-toggle strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Unavailable state ───────────────────────────────────────────────── */
+.unavailable {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.unavailable .emoji {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
